@@ -1,13 +1,16 @@
 package com.esliceu.comparador.controlador;
 
+import com.auth0.jwt.JWT;
 import com.esliceu.comparador.bean.UsuarioBean;
 import com.esliceu.comparador.model.Usuario;
+import com.esliceu.comparador.util.Token;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.DataException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -17,10 +20,12 @@ import java.util.List;
 public class UsuarioController extends UsuarioBean{
 
 
-
     @RequestMapping("/ObtenerTodosUsuarios")
-    public List<Usuario> obtenerTodosUsuarios(){
-        return (List<Usuario>) getUsuarioDao().findAll();
+    public Object obtenerTodosUsuarios() throws UnsupportedEncodingException {
+        Token token = new Token();
+        String code =  token.createToken();
+        System.out.println(code);
+        return token.decodeToken(code);
     }
 
 

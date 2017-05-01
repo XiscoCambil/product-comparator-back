@@ -11,7 +11,7 @@ import java.util.List;
  * Created by blackwidow on 26/04/17.
  */
 @RestController
-public class HistorialProductoCategoria extends HistorialProductoBean {
+public class HistorialProductoCategoriaController extends HistorialProductoBean {
 
 
     @RequestMapping("/obtenerTodosLosHistoriales")
