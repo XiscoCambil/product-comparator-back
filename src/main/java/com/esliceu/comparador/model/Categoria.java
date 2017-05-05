@@ -13,11 +13,8 @@ public class Categoria extends BaseModel {
     private String nombre;
 
     @ManyToOne
-    @JoinColumn(columnDefinition="integer",name = "id_padre")
+    @JoinColumn(name = "id_padre",nullable = true)
     private Categoria padre;
-
-    @OneToMany(mappedBy = "idCategoria")
-    private List<Producto> productos;
 
     public Categoria(String nombre) {
         this.nombre = nombre;
@@ -39,13 +36,5 @@ public class Categoria extends BaseModel {
 
     public void setPadre(Categoria padre) {
         this.padre = padre;
-    }
-
-    public List<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
     }
 }

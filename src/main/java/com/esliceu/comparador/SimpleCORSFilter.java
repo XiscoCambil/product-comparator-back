@@ -4,7 +4,7 @@ package com.esliceu.comparador;
  * Created by blackwidow on 1/05/17.
  */
 
-        import java.io.IOException;
+import java.io.IOException;
         import javax.servlet.Filter;
         import javax.servlet.FilterChain;
         import javax.servlet.FilterConfig;
@@ -19,12 +19,6 @@ package com.esliceu.comparador;
 
 @Component
 public class SimpleCORSFilter implements Filter {
-
-    private final Logger log = LoggerFactory.getLogger(SimpleCORSFilter.class);
-
-    public SimpleCORSFilter() {
-        log.info("SimpleCORSFilter init");
-    }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {

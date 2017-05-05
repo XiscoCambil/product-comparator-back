@@ -1,5 +1,6 @@
 package com.esliceu.comparador.model;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -11,13 +12,14 @@ import java.io.Serializable;
 public abstract class BaseModel implements Serializable {
 
     @Id
-    private long id;
+    @GeneratedValue
+    private Long id;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

@@ -19,13 +19,15 @@ public class EmpresaController extends EmpresaBean{
         return (List<Empresa>) getEmpresaDao().findAll();
     }
 
-    @RequestMapping("/ObtenerEmpresaPorNombre")
+    @RequestMapping("/empresa/obtenerEmpresaPorNombre")
     public Empresa obtenerEmpresaPorNombre(@RequestParam(required = true) String nombre){
         return  getEmpresaDao().findByNombre(nombre);
     }
 
-    @RequestMapping("/ObtenerEmpresaPorId")
+    @RequestMapping("/empresa/obtenerEmpresaPorId")
     public Empresa obtenerEmpresaPorId(@RequestParam(required = true) long id){
         return getEmpresaDao().findById(id);
     }
+
+
 }

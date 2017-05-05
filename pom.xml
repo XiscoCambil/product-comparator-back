@@ -47,9 +47,9 @@
           <version>2.7.7</version>
       </dependency>
     <dependency>
-      <groupId>com.auth0</groupId>
-      <artifactId>java-jwt</artifactId>
-      <version>3.1.0</version>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.7.0</version>
     </dependency>
   </dependencies>
 

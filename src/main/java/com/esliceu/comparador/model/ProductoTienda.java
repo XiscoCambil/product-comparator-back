@@ -12,10 +12,10 @@ import java.util.List;
 public class ProductoTienda extends BaseModel {
 
     @Column(name = "id_tienda")
-    private long idTienda;
+    private Long idTienda;
 
     @Column(name = "id_producto")
-    private long idProducto;
+    private Long idProducto;
 
     @OneToMany(mappedBy = "idProductoTienda")
     private List<HistorialProductoTienda> historialPrecio;

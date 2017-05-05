@@ -9,4 +9,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface EmpresaDao extends CrudRepository<Empresa,Long> {
     Empresa findById(long id);
     Empresa findByNombre(String nombre);
+
 }

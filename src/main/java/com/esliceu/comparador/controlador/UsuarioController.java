@@ -1,15 +1,14 @@
 package com.esliceu.comparador.controlador;
 
-import com.auth0.jwt.JWT;
+
 import com.esliceu.comparador.bean.UsuarioBean;
 import com.esliceu.comparador.model.Usuario;
-import com.esliceu.comparador.util.Token;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.exception.DataException;
+import com.esliceu.comparador.util.Sha512;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
@@ -19,41 +18,37 @@ import java.util.List;
 @RestController
 public class UsuarioController extends UsuarioBean{
 
+    @Autowired
+    private Usuario usuario;
 
     @RequestMapping("/ObtenerTodosUsuarios")
-    public Object obtenerTodosUsuarios() throws UnsupportedEncodingException {
-        Token token = new Token();
-        String code =  token.createToken();
-        System.out.println(code);
-        return token.decodeToken(code);
+    public List<Usuario> obtenerTodosUsuarios() throws UnsupportedEncodingException {
+       return (List<Usuario>) getUsuarioDao().findAll();
     }
 
 
     @RequestMapping(value= "/usuario/insertarUsuario", method = RequestMethod.POST)
     @ResponseBody
-    public String insertarUsuario(@RequestParam String nombre,
-                                  @RequestParam String apellidos,
-                                  @RequestParam Long telefono,
-                                  @RequestParam(required=true) String email,
-                                  @RequestParam(required=true) String password,
-                                  @RequestParam(required=true) Long id_localidad){
+    public Object insertarUsuario(@RequestParam(required=false) String nombre,
+                                  @RequestParam(required=false) String apellidos,
+                                  @RequestParam(required=false)  Long telefono,
+                                  @RequestParam String email,
+                                  @RequestParam String password,
+                                  @RequestParam int id_localidad){
 
 
-
+        Sha512 sha512 = new Sha512();
+        String hashPassword = sha512.get_SHA_512_SecurePassword(password);
        try {
-           getUsuarioDao().save(new Usuario(nombre, apellidos, telefono, email, password, id_localidad));
+           getUsuarioDao().save(new Usuario(nombre, apellidos, telefono, email, hashPassword, id_localidad));
        }catch (DataIntegrityViolationException e){
-           return e.getMessage();
+           return 500;
        }
-       /*
-       catch (DataException de){
-           return "ha habido un error en la inserccion";
-       }catch (MySQLIntegrityConstraintViolationException cve){
-           return "Este email ya a sido introducido";
-       }
-*/
-       return "insertado correctamente";
+       return 200;
+
+
     }
+
 
    /* @RequestMapping("/ObtenerMarcaPorNombre")
     public Marca obtenerMarcaPorNombre(@RequestParam(required = true) String nombre){

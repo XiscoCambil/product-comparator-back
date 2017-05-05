@@ -6,4 +6,7 @@ package com.esliceu.comparador.util;
 public class Keys {
 
     public static String SECRET_KEY = "alpaca";
+    public static String SALTO_SHA512 = "Tf4&s@@$S";
+    public static long EXPIRACION_TOKEN = 1800000;
+    public static long EXPIRACION_REFRESH_TOKEN = 3600000;
 }

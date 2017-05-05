@@ -1,9 +1,15 @@
 package com.esliceu.comparador;
 
 import com.esliceu.comparador.model.*;
+import com.esliceu.comparador.util.JWT;
+import com.esliceu.comparador.util.RefreshToken;
+import com.esliceu.comparador.util.Sha512;
+import com.esliceu.comparador.util.Token;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by xavi on 23/02/17.
@@ -80,6 +86,22 @@ public class BeanConfig {
     @Bean
     @Scope(value = "prototype")
     public ProductoCarro productoCarro(){return new ProductoCarro();}
+
+    @Bean
+    @Scope(value = "prototype")
+    public Token token() throws UnsupportedEncodingException {return new Token();}
+
+    @Bean
+    @Scope(value = "prototype")
+    public RefreshToken refreshToken() throws UnsupportedEncodingException {return new RefreshToken();}
+
+    @Bean
+    @Scope(value = "prototype")
+    public Sha512 sha512() throws UnsupportedEncodingException {return new Sha512();}
+
+    @Bean
+    @Scope(value = "prototype")
+    public JWT JWT() throws UnsupportedEncodingException {return new JWT();}
 
 
 

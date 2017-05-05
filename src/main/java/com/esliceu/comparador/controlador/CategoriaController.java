@@ -12,20 +12,30 @@ import java.util.List;
  * Created by blackwidow on 22/04/17.
  */
 @RestController
-public class CategoriaController extends CategoriaBean{
+public class CategoriaController extends CategoriaBean {
 
     @RequestMapping("/ObtenerTodasCategorias")
-    public List<Categoria> obtenerTodasCategorias(){
+    public List<Categoria> obtenerTodasCategorias() {
         return (List<Categoria>) getCategoriaDao().findAll();
     }
 
-    @RequestMapping("/ObtenerCategoriaPorNombre")
-    public Categoria obtenerCategoriaPorNombre(@RequestParam(required = true) String nombre){
-        return  getCategoriaDao().findByNombre(nombre);
+    @RequestMapping("/categoria/ObtenerCategoriaPorNombre")
+    public Categoria obtenerCategoriaPorNombre(@RequestParam(required = true) String nombre) {
+        return getCategoriaDao().findByNombre(nombre);
     }
 
-    @RequestMapping("/ObtenerCategoriasPorPadre")
-    public List<Categoria> obtenerCategoriasPorPadre(@RequestParam(required = true) Long padre){
-        return  getCategoriaDao().findByPadre(padre);
+    @RequestMapping("/categoria/ObtenerHijosDeCategoriaPadre")
+    public List<Categoria> ObtenerHijosDeCategoriaPadre(@RequestParam(required = true) Long id_padre) {
+        List<Categoria> hijos;
+        setCategoria(getCategoriaDao().findById(id_padre));
+        if (getCategoria() != null) {
+            hijos = getCategoriaDao().findByPadre(getCategoria());
+            if(hijos.size() == 0){
+                return null;
+            }
+            return hijos;
+        }
+        return null;
     }
+
 }

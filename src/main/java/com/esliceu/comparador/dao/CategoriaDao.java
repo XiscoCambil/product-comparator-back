@@ -8,7 +8,10 @@ import java.util.List;
 /**
  * Created by blackwidow on 22/04/17.
  */
-public interface CategoriaDao extends CrudRepository<Categoria,Long> {
+public interface CategoriaDao extends CrudRepository<Categoria, Long> {
+    Categoria findById(Long id);
+
     Categoria findByNombre(String nombre);
-    List<Categoria> findByPadre(Long idPadre);
+
+    List<Categoria> findByPadre(Categoria categoria);
 }

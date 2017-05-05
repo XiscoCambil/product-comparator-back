@@ -1,43 +1,71 @@
 package com.esliceu.comparador.util;
+import java.util.Date;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
-
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.esliceu.comparador.util.Keys.*;
 
 /**
  * Created by blackwidow on 1/05/17.
  */
 public class Token {
 
-    Algorithm algorithm = Algorithm.HMAC256(Keys.SECRET_KEY);
+    private int id;
 
-    public Token() throws UnsupportedEncodingException {
-    }
+    private String email;
 
-    public String createToken(){
-        return JWT.create()
-                .withClaim("nombre","xiscoJWT")
-                .withIssuer("auth0")
-                .sign(algorithm);
-    }
+    private Date fecha;
 
-    public Object decodeToken(String token){
-        try {
-            DecodedJWT jwt = JWT.decode(token);
-            return jwt.getToken();
-        }catch (JWTCreationException jwt){
-            return jwt.getMessage();
-        }
+    private int id_localidad;
+
+    private Date fechaExp;
+
+    public Token(){
 
     }
 
+    public Token(int id, String email, Date fecha, int id_localidad,Date fechaExp) {
+        this.id = id;
+        this.email = email;
+        this.fecha = fecha;
+        this.id_localidad = id_localidad;
+        this.fechaExp = fechaExp;
+    }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getId_localidad() {
+        return id_localidad;
+    }
+
+    public void setId_localidad(int id_localidad) {
+        this.id_localidad = id_localidad;
+    }
+
+    public Date getFechaExp() {
+        return fechaExp;
+    }
+
+    public void setFechaExp(Date fechaExp) {
+        this.fechaExp = fechaExp;
+    }
 }

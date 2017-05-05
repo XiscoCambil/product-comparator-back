@@ -20,7 +20,6 @@ public class Aplicacion {
     public CommandLineRunner demo(LocalidadDao localidadDao) {
 
         return (args) -> {
-            System.out.println("paco");
 
         };
 

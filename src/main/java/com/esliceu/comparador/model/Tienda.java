@@ -1,6 +1,7 @@
 package com.esliceu.comparador.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by blackwidow on 24/04/17.
@@ -23,7 +24,10 @@ public class Tienda extends BaseModel {
     private long idEmpresa;
 
     @Column(name = "id_localidad")
-    private long idLocalidad;
+    private int idLocalidad;
+
+    @OneToMany(mappedBy = "idTienda")
+    private List<ProductoTienda> productosTienda;
 
     public Tienda(String cif, Double latitud, Double longitud, String direccion, Long telefono) {
         this.cif = cif;
@@ -83,12 +87,20 @@ public class Tienda extends BaseModel {
         this.idEmpresa = idEmpresa;
     }
 
-    public long getIdLocalidad() {
+    public int getIdLocalidad() {
         return idLocalidad;
     }
 
-    public void setIdLocalidad(long idLocalidad) {
+    public void setIdLocalidad(int idLocalidad) {
         this.idLocalidad = idLocalidad;
+    }
+
+    public List<ProductoTienda> getProductosTienda() {
+        return productosTienda;
+    }
+
+    public void setProductosTienda(List<ProductoTienda> productosTienda) {
+        this.productosTienda = productosTienda;
     }
 }
 

@@ -21,13 +21,13 @@ public class Usuario extends BaseModel{
     private String password;
 
     @Column(name = "id_localidad")
-    private Long IdLocalidad;
+    private int IdLocalidad;
 
     @OneToMany(mappedBy = "idUsuario")
     private List<Carro> carros;
 
 
-    public Usuario(String nombre, String apellidos, Long telefono, String email, String password, Long id_localidad) {
+    public Usuario(String nombre, String apellidos, Long telefono, String email, String password, int id_localidad) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.telefono = telefono;
@@ -78,11 +78,11 @@ public class Usuario extends BaseModel{
         this.password = password;
     }
 
-    public long getIdLocalidad() {
+    public int getIdLocalidad() {
         return IdLocalidad;
     }
 
-    public void setIdLocalidad(long idlocalidad) {
+    public void setIdLocalidad(int idlocalidad) {
         IdLocalidad = idlocalidad;
     }
 

@@ -1,11 +1,17 @@
 package com.esliceu.comparador.controlador;
 
 import com.esliceu.comparador.bean.ProductoTiendaBean;
+import com.esliceu.comparador.dao.ProductoDao;
+import com.esliceu.comparador.dao.TiendaDao;
+import com.esliceu.comparador.model.Producto;
 import com.esliceu.comparador.model.ProductoTienda;
 import com.esliceu.comparador.model.Tienda;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,15 +20,18 @@ import java.util.List;
 @RestController
 public class ProductoTiendaController extends ProductoTiendaBean{
 
+    @Autowired
+    private TiendaDao tiendaDao;
+
+    @Autowired
+    private ProductoDao productoDao;
+
+
     @RequestMapping("/ObtenerTodosProductoTienda")
     public List<ProductoTienda> obtenerTodosProductoTienda(){
         return (List<ProductoTienda>) getProductoTiendaDao().findAll();
     }
 
-   /* @RequestMapping("/ObtenerMarcaPorNombre")
-    public Marca obtenerMarcaPorNombre(@RequestParam(required = true) String nombre){
-        return getMarcaDao().findByNombre(nombre);
-    }
-    */
+
 
 }
