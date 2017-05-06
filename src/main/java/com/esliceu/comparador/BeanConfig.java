@@ -1,10 +1,7 @@
 package com.esliceu.comparador;
 
 import com.esliceu.comparador.model.*;
-import com.esliceu.comparador.util.JWT;
-import com.esliceu.comparador.util.RefreshToken;
-import com.esliceu.comparador.util.Sha512;
-import com.esliceu.comparador.util.Token;
+import com.esliceu.comparador.util.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -94,6 +91,11 @@ public class BeanConfig {
     @Bean
     @Scope(value = "prototype")
     public RefreshToken refreshToken() throws UnsupportedEncodingException {return new RefreshToken();}
+
+    @Bean
+    @Scope(value = "prototype")
+    public AccesToken accesToken() throws UnsupportedEncodingException {return new AccesToken();}
+
 
     @Bean
     @Scope(value = "prototype")

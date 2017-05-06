@@ -20,12 +20,12 @@ public class LocalidadController extends LocalidadBean {
     }
 
     @RequestMapping("/ObtenerLocalidadPorNombre")
-    public Localidad obtenerLocalidadPorNombre(@RequestParam(required = true) String nombre){
+    public Localidad obtenerLocalidadPorNombre( String nombre){
         return getLocalidadDao().findByNombre(nombre);
     }
 
     @RequestMapping("/ObtenerLocalidadPorId")
-    public Localidad obtenerLocalidadPorId(@RequestParam(required = true) long id){
+    public Localidad obtenerLocalidadPorId(@RequestParam long id){
         return getLocalidadDao().findById(id);
     }
 

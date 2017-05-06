@@ -17,9 +17,6 @@ import java.util.List;
 @RestController
 public class TiendaController extends TiendaBean{
 
-    @Qualifier("usuario")
-    private Tienda tienda;
-
     @RequestMapping("/ObtenerTodasTiendas")
     public List<Tienda> obtenerTodasTiendas(){
         return (List<Tienda>) getTiendaDao().findAll();
@@ -27,8 +24,8 @@ public class TiendaController extends TiendaBean{
 
     @RequestMapping("/tienda/obtenerTiendasPorProductoYLocalidad")
     public List<Tienda> obtenerTiendasPorProducto(
-            @RequestParam(required = true) Long id_producto,
-            @RequestParam(required = true) int id_localidad){
+            @RequestParam Long id_producto,
+            @RequestParam int id_localidad){
         boolean existeProductoEnTienda = false;
         List<Tienda> tiendas = getTiendaDao().findByIdLocalidad(id_localidad);
         List<Tienda> tiendasConProducto = new ArrayList<>();

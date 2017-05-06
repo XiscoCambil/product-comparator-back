@@ -1,4 +1,6 @@
 package com.esliceu.comparador.util;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import java.util.Date;
 
 
@@ -7,65 +9,31 @@ import java.util.Date;
  */
 public class Token {
 
-    private int id;
+    private String accesToken;
 
-    private String email;
+    private String refreshToken;
 
-    private Date fecha;
-
-    private int id_localidad;
-
-    private Date fechaExp;
-
-    public Token(){
-
+    public Token() {
     }
 
-    public Token(int id, String email, Date fecha, int id_localidad,Date fechaExp) {
-        this.id = id;
-        this.email = email;
-        this.fecha = fecha;
-        this.id_localidad = id_localidad;
-        this.fechaExp = fechaExp;
+    public Token(String accesToken, String refreshToken) {
+        this.accesToken = accesToken;
+        this.refreshToken = refreshToken;
     }
 
-    public int getId() {
-        return id;
+    public String getAccesToken() {
+        return accesToken;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAccesToken(String accesToken) {
+        this.accesToken = accesToken;
     }
 
-    public String getEmail() {
-        return email;
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public int getId_localidad() {
-        return id_localidad;
-    }
-
-    public void setId_localidad(int id_localidad) {
-        this.id_localidad = id_localidad;
-    }
-
-    public Date getFechaExp() {
-        return fechaExp;
-    }
-
-    public void setFechaExp(Date fechaExp) {
-        this.fechaExp = fechaExp;
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

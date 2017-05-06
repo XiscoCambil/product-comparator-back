@@ -16,22 +16,24 @@ import java.util.Date;
  */
 public class JWT {
 
-    @Qualifier("token")
-    private Token accesToken;
+    @Qualifier("accesToken")
+    private AccesToken accesToken;
 
     @Qualifier("refreshToken")
     private RefreshToken refresToken;
 
+    @Qualifier("token")
+    private Token token;
+
     public JWT() throws UnsupportedEncodingException {
     }
 
-    public HashMap<String,Object> crearJWT(int id, String email, Date ahora, int id_localidad) throws UnsupportedEncodingException {
+    public Token crearJWT(int id, String email, Date ahora, int id_localidad) throws UnsupportedEncodingException {
 
         Date expiracion = new Date(ahora.getTime()+Keys.EXPIRACION_TOKEN);
         Date refreshExpiracion = new Date(expiracion.getTime()+Keys.EXPIRACION_REFRESH_TOKEN);
 
-        accesToken = new Token(id,email,ahora,id_localidad,expiracion);
-        HashMap<String,Object> tokens = new HashMap<>();
+        accesToken = new AccesToken(id,email,ahora,id_localidad,expiracion);
 
         String jwtAccesToken = Jwts.builder()
                 .claim("acces_token", accesToken)
@@ -51,15 +53,12 @@ public class JWT {
                 )
                 .compact();
 
-        tokens.put("acces_token",jwtAccesToken);
-        tokens.put("refresh_token",jwtRefreshToken);
-
-        return tokens;
+        return new Token(jwtAccesToken,jwtRefreshToken);
     }
 
-    public int validarJwt(String accesTokenCode) throws UnsupportedEncodingException {
+    public int validarJwt(Token token) throws UnsupportedEncodingException {
         try {
-           accesToken = decodificarJwt(accesTokenCode);
+           accesToken = decodificarJwt(token.getAccesToken());
            if(accesToken.getFechaExp().getTime() < new Date().getTime()){
                return 502;
            }
@@ -69,7 +68,7 @@ public class JWT {
         return 200;
     }
 
-    public Token decodificarJwt(String accesTokenString) throws UnsupportedEncodingException {
+    public AccesToken decodificarJwt(String accesTokenString) throws UnsupportedEncodingException {
         HashMap<String, Object> cuerpoToken;
         Jws<Claims> valoresToken;
         try {
@@ -79,7 +78,7 @@ public class JWT {
 
             cuerpoToken = (LinkedHashMap<String, Object>) valoresToken.getBody().get("acces_token");
 
-            accesToken = new Token((Integer) cuerpoToken.get("id"),(String) cuerpoToken.get("email"),new Date((Long) cuerpoToken.get("fecha")),
+            accesToken = new AccesToken((Integer) cuerpoToken.get("id"),(String) cuerpoToken.get("email"),new Date((Long) cuerpoToken.get("fecha")),
                     (Integer) cuerpoToken.get("id_localidad"), new Date((Long) cuerpoToken.get("fechaExp")));
 
         } catch (Exception e){
@@ -89,19 +88,17 @@ public class JWT {
         return accesToken;
     }
 
-    public HashMap<String,Object> refreshToken(String accesTokenCode,String refreshTokenCode) {
+    public Token refreshToken(Token token) {
         LinkedHashMap<String, Object> cuerpoToken;
-        Jws<Claims> valoresToken;
-        HashMap<String,Object> newAccesToken;
+        Jws<Claims> valoresRefreshToken;
         try {
-            valoresToken = Jwts.parser()
+            valoresRefreshToken = Jwts.parser()
                     .setSigningKey(Keys.SECRET_KEY.getBytes("UTF-8"))
-                    .parseClaimsJws(refreshTokenCode);
-            cuerpoToken = (LinkedHashMap<String, Object>) valoresToken.getBody().get("refresh_token");
+                    .parseClaimsJws(token.getRefreshToken());
+            cuerpoToken = (LinkedHashMap<String, Object>) valoresRefreshToken.getBody().get("refresh_token");
             Date refreshExp = new Date((Long) cuerpoToken.get("refreshExp"));
             Date ahora = new Date();
-            System.out.println(refreshExp.getTime());
-            if (!cuerpoToken.get("acces_token").equals(accesTokenCode) || refreshExp.getTime() < ahora.getTime()) {
+            if (!cuerpoToken.get("acces_token").equals(token.getAccesToken()) || refreshExp.getTime() < ahora.getTime()) {
                 return null;
             } else {
                 JWT jwt = new JWT();
@@ -109,12 +106,12 @@ public class JWT {
                         .setSigningKey(Keys.SECRET_KEY.getBytes("UTF-8"))
                         .parseClaimsJws((String) cuerpoToken.get("acces_token"));
                 cuerpoToken = (LinkedHashMap<String, Object>) valoresAccesToken.getBody().get("acces_token");
-                newAccesToken = jwt.crearJWT((int)cuerpoToken.get("id"),(String) cuerpoToken.get("email"),new Date(),(int) cuerpoToken.get("id_localidad"));
+                token = jwt.crearJWT((int)cuerpoToken.get("id"),(String) cuerpoToken.get("email"),new Date(),(int) cuerpoToken.get("id_localidad"));
             }
+            return token;
         }catch (Exception e){
             return null;
         }
-        return newAccesToken;
     }
 
 }

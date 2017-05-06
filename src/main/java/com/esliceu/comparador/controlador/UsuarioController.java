@@ -7,6 +7,7 @@ import com.esliceu.comparador.util.Sha512;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -28,25 +29,20 @@ public class UsuarioController extends UsuarioBean{
 
 
     @RequestMapping(value= "/usuario/insertarUsuario", method = RequestMethod.POST)
-    @ResponseBody
-    public Object insertarUsuario(@RequestParam(required=false) String nombre,
-                                  @RequestParam(required=false) String apellidos,
-                                  @RequestParam(required=false)  Long telefono,
-                                  @RequestParam String email,
-                                  @RequestParam String password,
-                                  @RequestParam int id_localidad){
+    public @ResponseBody Object insertarUsuario(@RequestBody Usuario usuario){
 
-
+        if(usuario.getEmail() == null || usuario.getPassword() == null || usuario.getIdLocalidad() == 0){
+            return 500;
+        }
         Sha512 sha512 = new Sha512();
-        String hashPassword = sha512.get_SHA_512_SecurePassword(password);
+        String hashPassword = sha512.get_SHA_512_SecurePassword(usuario.getPassword());
        try {
-           getUsuarioDao().save(new Usuario(nombre, apellidos, telefono, email, hashPassword, id_localidad));
+           getUsuarioDao().save(new Usuario(usuario.getNombre(), usuario.getApellidos(),
+                   usuario.getTelefono(), usuario.getEmail(), hashPassword, usuario.getIdLocalidad()));
        }catch (DataIntegrityViolationException e){
            return 500;
        }
        return 200;
-
-
     }
 
 
