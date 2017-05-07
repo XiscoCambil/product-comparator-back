@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -27,22 +28,28 @@ public class TokenController extends BaseBean {
 
     @RequestMapping(value= "/token/crearToken", method = RequestMethod.POST)
     public @ResponseBody Token iniciarSesion(@RequestBody Usuario usuario)
-            throws UnsupportedEncodingException {
+            throws IOException {
+
         if(usuario.getEmail() != null && usuario.getPassword() != null) {
             Sha512 sha512 = new Sha512();
             usuario = usuarioDao.findByEmailAndPassword(usuario.getEmail(), sha512.get_SHA_512_SecurePassword(usuario.getPassword()));
             if (usuario != null) {
                 JWT jwt = new JWT();
-                token = jwt.crearJWT((int) (long) usuario.getId(), usuario.getEmail(), new Date(), usuario.getIdLocalidad());
+                return jwt.crearJWT((int) (long) usuario.getId(), usuario.getEmail(), new Date(), usuario.getIdLocalidad());
+            }else{
+                getHttpResponse().sendError(200);
             }
         }
-        return token;
+        return null;
     }
 
     @RequestMapping(value = "/token/validarToken",method = RequestMethod.POST)
-    public @ResponseBody int validateToken(@RequestBody Token token) throws UnsupportedEncodingException {
+    public @ResponseBody int validateToken(@RequestBody Token token) throws IOException {
         JWT jwt = new JWT();
         int code =  jwt.validarJwt(token);
+        if(code == 500 || code == 502){
+            getHttpResponse().sendError(code);
+        }
         return code;
     }
 
