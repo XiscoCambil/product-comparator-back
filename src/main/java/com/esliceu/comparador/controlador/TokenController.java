@@ -36,20 +36,15 @@ public class TokenController extends BaseBean {
             if (usuario != null) {
                 JWT jwt = new JWT();
                 return jwt.crearJWT((int) (long) usuario.getId(), usuario.getEmail(), new Date(), usuario.getIdLocalidad());
-            }else{
-                getHttpResponse().sendError(200);
             }
         }
-        return null;
+        return token;
     }
 
     @RequestMapping(value = "/token/validarToken",method = RequestMethod.POST)
     public @ResponseBody int validateToken(@RequestBody Token token) throws IOException {
         JWT jwt = new JWT();
         int code =  jwt.validarJwt(token);
-        if(code == 500 || code == 502){
-            getHttpResponse().sendError(code);
-        }
         return code;
     }
 
