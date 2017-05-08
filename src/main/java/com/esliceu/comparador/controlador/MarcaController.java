@@ -14,23 +14,24 @@ import java.util.List;
 @RestController
 public class MarcaController extends MarcaBean {
 
-    @RequestMapping("/ObtenerTodasMarcas")
+    @RequestMapping("/marca/obtenerTodasMarcas")
     public List<Marca> obtenerTodasMarcas(){
         return (List<Marca>) getMarcaDao().findAll();
     }
 
-    @RequestMapping("/ObtenerMarcaPorNombre")
-    public Marca obtenerMarcaPorNombre(@RequestParam(required = true) String nombre){
+    @RequestMapping("/marca/obtenerMarcaPorNombre")
+    public Marca obtenerMarcaPorNombre(@RequestParam String nombre){
         return getMarcaDao().findByNombre(nombre);
     }
 
-    @RequestMapping("/ObtenerMarcaPorId")
-    public Marca obtenerMarcaPorId(@RequestParam(required = true) long id){
+    @RequestMapping("/marca/obtenerMarcaPorId")
+    public Marca obtenerMarcaPorId(@RequestParam long id)
+    {
         return getMarcaDao().findById(id);
     }
 
-    @RequestMapping("/ObtenerMarcaPorEmpresa")
-    public List<Marca> obtenerMarcaPorEmpresa(@RequestParam(required = true) long id){
+    @RequestMapping("/marca/obtenerMarcaPorEmpresa")
+    public List<Marca> obtenerMarcaPorEmpresa(@RequestParam long id){
         return getMarcaDao().findByIdEmpresa(id);
     }
 }

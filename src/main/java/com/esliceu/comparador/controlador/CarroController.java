@@ -31,9 +31,18 @@ public class CarroController extends CarroBean {
     @Autowired
     private ProductoTiendaDao productoTiendaDao;
 
+
+    @RequestMapping(value= "/usario/carros/obtenerCarrosUsuario", method = RequestMethod.POST)
+    public @ResponseBody List<Carro> obtenerCarrosDeUsuario(@RequestBody Map<String,Object> json) throws UnsupportedEncodingException {
+
+        JWT jwt = new JWT();
+        AccesToken accesToken = jwt.decodificarJwt((String) json.get("accesToken"));
+
+        return usuarioDao.findOne((long)accesToken.getId()).getCarros();
+    }
+
     @RequestMapping(value= "/carro/obtenerProductosCarro", method = RequestMethod.POST)
     public @ResponseBody List<ProductoTienda> obtenerProductosCarro(@RequestBody Map<String,Object> json) throws UnsupportedEncodingException {
-        System.out.println("hola");
 
         JWT jwt = new JWT();
         HashMap<String,Object> map = new HashMap<>();
@@ -44,7 +53,6 @@ public class CarroController extends CarroBean {
         for(Carro carro : usuario.getCarros()){
             if(carro.getId() == (int) json.get("id_carro")){
                 for(ProductoCarro productoCarro : getCarroDao().findById(carro.getId()).getProductos()) {
-                    //productos.add(productoDao.findOne(productoTiendaDao.findById(productoCarro.getIdProductoTienda()).getId()));
                     productoEnCarro.add(productoTiendaDao.findById(productoCarro.getIdProductoTienda()));
                 }
             }
