@@ -33,6 +33,8 @@ public class CarroController extends CarroBean {
 
     @RequestMapping(value= "/carro/obtenerProductosCarro", method = RequestMethod.POST)
     public @ResponseBody List<ProductoTienda> obtenerProductosCarro(@RequestBody Map<String,Object> json) throws UnsupportedEncodingException {
+        System.out.println("hola");
+
         JWT jwt = new JWT();
         HashMap<String,Object> map = new HashMap<>();
         List<ProductoTienda> productoEnCarro = new ArrayList<>();

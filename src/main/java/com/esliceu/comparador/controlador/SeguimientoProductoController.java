@@ -3,6 +3,7 @@ package com.esliceu.comparador.controlador;
 import com.esliceu.comparador.bean.SeguimientoProductoBean;
 import com.esliceu.comparador.model.SeguimientoProducto;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.List;
 @RestController
 public class SeguimientoProductoController extends SeguimientoProductoBean {
 
-    @RequestMapping("/ObtenerTodosLosSeguimientos")
-    public List<SeguimientoProducto> obtenerTodosLosSeguimientos(){
+    @RequestMapping("/usuario/seguimiento/ObtenerTodosLosSeguimientos")
+    public @ResponseBody  List<SeguimientoProducto> obtenerTodosLosSeguimientos(){
         return (List<SeguimientoProducto>) getSeguimientoProductoDao().findAll();
     }
 }
