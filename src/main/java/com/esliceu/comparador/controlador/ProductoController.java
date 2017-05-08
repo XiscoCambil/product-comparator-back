@@ -30,10 +30,9 @@ public class ProductoController extends ProductoBean {
     @Qualifier("categoria")
     Categoria categoria;
 
-    @RequestMapping("/ObtenerTodosProductos")
-    public Token obtenerTodosProductos() throws UnsupportedEncodingException {
-        return null;
-        //return (List<Producto>) getProductoDao().findAll();
+    @RequestMapping("/producto/obtenerTodosProductos")
+    public List<Producto> obtenerTodosProductos() throws UnsupportedEncodingException {
+        return (List<Producto>) getProductoDao().findAll();
     }
 
     @RequestMapping("/producto/obtenerProductosPorLocalidad")
