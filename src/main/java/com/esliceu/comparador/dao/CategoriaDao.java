@@ -14,4 +14,6 @@ public interface CategoriaDao extends CrudRepository<Categoria, Long> {
     Categoria findByNombre(String nombre);
 
     List<Categoria> findByPadre(Categoria categoria);
+
+
 }

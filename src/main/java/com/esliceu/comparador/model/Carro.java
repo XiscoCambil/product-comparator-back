@@ -16,11 +16,14 @@ public class Carro extends BaseModel {
     @Column(name = "id_usuario")
     private Long idUsuario;
 
+    private String nombre;
+
     @OneToMany(mappedBy = "idCarro")
     private List<ProductoCarro> productos;
 
-    public Carro(Long idUsuario) {
+    public Carro(Long idUsuario,String nombre) {
         this.idUsuario = idUsuario;
+        this.nombre = nombre;
     }
 
     public Carro(){}
@@ -31,6 +34,14 @@ public class Carro extends BaseModel {
 
     public void setIdUsuario(Long idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public List<ProductoCarro> getProductos() {

@@ -2,13 +2,11 @@ package com.esliceu.comparador.controlador;
 
 import com.esliceu.comparador.bean.ProductoBean;
 import com.esliceu.comparador.dao.TiendaDao;
-import com.esliceu.comparador.model.Producto;
-import com.esliceu.comparador.model.ProductoTienda;
-import com.esliceu.comparador.model.Tienda;
-import com.esliceu.comparador.model.Usuario;
+import com.esliceu.comparador.model.*;
 import com.esliceu.comparador.util.JWT;
 import com.esliceu.comparador.util.Token;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +27,9 @@ public class ProductoController extends ProductoBean {
     @Autowired
     private TiendaDao tiendaDao;
 
+    @Qualifier("categoria")
+    Categoria categoria;
+
     @RequestMapping("/ObtenerTodosProductos")
     public Token obtenerTodosProductos() throws UnsupportedEncodingException {
         return null;
@@ -37,7 +38,8 @@ public class ProductoController extends ProductoBean {
 
     @RequestMapping("/producto/obtenerProductosPorLocalidad")
     public List<Producto> obtenerProductosPorLocalidad(
-            @RequestParam(required=true) int id_localidad){
+            @RequestParam int id_localidad,Long id_categoria){
+
         List<Tienda> tiendas = tiendaDao.findByIdLocalidad(id_localidad);
         List<Producto> productos = new ArrayList<>();
         boolean productoEnLista = false;
@@ -60,8 +62,37 @@ public class ProductoController extends ProductoBean {
                 }
             }
         }
-        return productos;
+
+        return null;
+
     }
+
+
+
+    private boolean productoEnCategoria(Producto producto,Long id_categoria){
+        boolean productoEnCategoria = false;
+        boolean categoriaConHijos = false;
+        CategoriaController categoriaController = new CategoriaController();
+        categoria = getCategoriaDao().findById(producto.getIdCategoria());
+        List<Categoria> categoriasHijas = categoriaController.ObtenerHijosDeCategoriaPadre(categoria.getId());
+        for(Categoria categoriaHija : categoriasHijas){
+            if(categoriaHija.getId() == id_categoria){
+                productoEnCategoria = true;
+                break;
+            }else{
+                List<Categoria> categoriasHijas2 = categoriaController.ObtenerHijosDeCategoriaPadre(categoriaHija.getId());
+                if(categoriasHijas2 != null){
+                    productoEnCategoria(producto,categoriaHija.getId());
+                }
+                return false;
+            }
+        }
+        if(productoEnCategoria){
+            return true;
+        }
+        return false;
+        }
+
 
    /* @RequestMapping("/ObtenerMarcaPorNombre")
     public Marca obtenerMarcaPorNombre(@RequestParam(required = true) String nombre){

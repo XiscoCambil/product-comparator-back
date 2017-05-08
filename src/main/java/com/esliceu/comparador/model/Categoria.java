@@ -13,7 +13,7 @@ public class Categoria extends BaseModel {
     private String nombre;
 
     @ManyToOne
-    @JoinColumn(name = "id_padre",nullable = true)
+    @JoinColumn(name = "id_padre")
     private Categoria padre;
 
     public Categoria(String nombre) {
