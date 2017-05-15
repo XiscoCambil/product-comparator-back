@@ -14,17 +14,17 @@ import java.util.List;
 @RestController
 public class LocalidadController extends LocalidadBean {
 
-    @RequestMapping("/ObtenerTodasLocalidades")
+    @RequestMapping("/localidad/obtenerTodasLocalidades")
     public List<Localidad> obtenerTodasLocalidades(){
         return (List<Localidad>) getLocalidadDao().findAll();
     }
 
-    @RequestMapping("/ObtenerLocalidadPorNombre")
+    @RequestMapping("/localidad/obtenerLocalidadPorNombre")
     public Localidad obtenerLocalidadPorNombre( String nombre){
         return getLocalidadDao().findByNombre(nombre);
     }
 
-    @RequestMapping("/ObtenerLocalidadPorId")
+    @RequestMapping("/localidad/obtenerLocalidadPorId")
     public Localidad obtenerLocalidadPorId(@RequestParam long id){
         return getLocalidadDao().findById(id);
     }

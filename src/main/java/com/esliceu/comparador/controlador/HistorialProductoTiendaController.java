@@ -21,7 +21,14 @@ public class HistorialProductoTiendaController extends HistorialProductoTiendaBe
 
     @RequestMapping("/productoHistorial/obtenerHistorialDelProductoTienda")
     public List<HistorialProductoTienda> obtenerHistorialProductoDelProductoTienda(
-            @RequestParam(required = true) Long id_producto_tienda){
+            @RequestParam Long id_producto_tienda){
         return  getHistorialProductoTiendaDao().findByIdProductoTienda(id_producto_tienda);
+    }
+
+    @RequestMapping("/HistorialProducto/obtenerPrecioDelProductoTienda")
+    public HistorialProductoTienda obtenerPrecioDelProductoTienda(
+            @RequestParam Long id_producto_tienda){
+        List<HistorialProductoTienda> precios = getHistorialProductoTiendaDao().findByIdProductoTienda(id_producto_tienda);
+        return precios.get(precios.size()-1);
     }
 }

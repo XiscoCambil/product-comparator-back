@@ -23,10 +23,10 @@ public class SeguimientoProductoController extends SeguimientoProductoBean {
     @Autowired
     private ProductoDao productoDao;
 
-    @RequestMapping(value = "/usuario/seguimiento/ObtenerTodosLosSeguimientos",method = RequestMethod.POST)
+    @RequestMapping(value = "/usuario/seguimiento/obtenerTodosLosSeguimientos",method = RequestMethod.POST)
     public @ResponseBody  List<Producto> obtenerTodosLosSeguimientos(@RequestBody Map<String,Object> json) throws UnsupportedEncodingException {
         JWT jwt = new JWT();
-        AccesToken accesToken = jwt.decodificarJwt((String) json.get("access_token"));
+        AccesToken accesToken = jwt.decodificarJwt((String) json.get("accesToken"));
         List<Producto> productos = new ArrayList<>();
         for (SeguimientoProducto seguimientoProducto : getSeguimientoProductoDao().findByIdUsuario((long) accesToken.getId())){
             productos.add(productoDao.findOne(seguimientoProducto.getIdProducto()));

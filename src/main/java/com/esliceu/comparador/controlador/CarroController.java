@@ -53,7 +53,7 @@ public class CarroController extends CarroBean {
         for(Carro carro : usuario.getCarros()){
             if(carro.getId() == (int) json.get("id_carro")){
                 for(ProductoCarro productoCarro : getCarroDao().findById(carro.getId()).getProductos()) {
-                    productoEnCarro.add(productoTiendaDao.findById(productoCarro.getIdProductoTienda()));
+                    productoEnCarro.add(productoTiendaDao.findOne(productoCarro.getIdProductoTienda()));
                 }
             }
         }

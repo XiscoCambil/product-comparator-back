@@ -10,6 +10,7 @@ import java.util.List;
  * Created by blackwidow on 24/04/17.
  */
 public interface ProductoTiendaDao extends CrudRepository<ProductoTienda,Long> {
-     ProductoTienda findById(Long id);
      List<ProductoTienda> findByIdProducto(Long id_producto);
+     List<ProductoTienda> findByIdTienda(Long id_tienda);
+
 }

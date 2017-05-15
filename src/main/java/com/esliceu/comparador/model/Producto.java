@@ -16,13 +16,13 @@ public class Producto extends BaseModel {
     private String codigoBarras;
 
     @Column(name = "valor_energetico")
-    private String valorEnergetico;
+    private int valorEnergetico;
 
-    private String proteinas;
+    private Double proteinas;
 
-    private String carbohidratos;
+    private Double carbohidratos;
 
-    private String grasas;
+    private Double grasas;
 
     @Column(name = "id_marca")
     private long idMarca;
@@ -36,7 +36,7 @@ public class Producto extends BaseModel {
     @OneToMany(mappedBy = "idProducto")
     private List<ProductoTienda> productoTiendas;
 
-    public Producto(String nombre, String codigoBarras, String valorEnergetico, String proteinas, String carbohidratos, String grasas, long id_marca, long id_categoria) {
+    public Producto(String nombre, String codigoBarras, int valorEnergetico, Double proteinas, Double carbohidratos, Double grasas, long id_marca, long id_categoria) {
         this.nombre = nombre;
         this.codigoBarras = codigoBarras;
         this.valorEnergetico = valorEnergetico;
@@ -65,35 +65,35 @@ public class Producto extends BaseModel {
         this.codigoBarras = codigoBarras;
     }
 
-    public String getValorEnergetico() {
+    public int getValorEnergetico() {
         return valorEnergetico;
     }
 
-    public void setValorEnergetico(String valorEnergetico) {
+    public void setValorEnergetico(int valorEnergetico) {
         this.valorEnergetico = valorEnergetico;
     }
 
-    public String getProteinas() {
+    public Double getProteinas() {
         return proteinas;
     }
 
-    public void setProteinas(String proteinas) {
+    public void setProteinas(Double proteinas) {
         this.proteinas = proteinas;
     }
 
-    public String getCarbohidratos() {
+    public Double getCarbohidratos() {
         return carbohidratos;
     }
 
-    public void setCarbohidratos(String carbohidratos) {
+    public void setCarbohidratos(Double carbohidratos) {
         this.carbohidratos = carbohidratos;
     }
 
-    public String getGrasas() {
+    public Double getGrasas() {
         return grasas;
     }
 
-    public void setGrasas(String grasas) {
+    public void setGrasas(Double grasas) {
         this.grasas = grasas;
     }
 

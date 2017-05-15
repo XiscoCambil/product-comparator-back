@@ -13,8 +13,5 @@ import java.util.List;
 @RestController
 public class ProductoValoracionController extends ProductoValoracionBean {
 
-    @RequestMapping("/productos/obtenerValoracionesProducto")
-    public List<ProductoValoracion> obtenerTodosProductoValoracion(){
-        return (List<ProductoValoracion>) getProductoValoracionDao().findAll();
-    }
+
 }

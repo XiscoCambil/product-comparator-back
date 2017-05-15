@@ -1,6 +1,7 @@
 package com.esliceu.comparador.controlador;
 
 import com.esliceu.comparador.bean.ProductoBean;
+import com.esliceu.comparador.dao.ProductoValoracionDao;
 import com.esliceu.comparador.dao.TiendaDao;
 import com.esliceu.comparador.model.*;
 import com.esliceu.comparador.util.JWT;
@@ -26,6 +27,9 @@ public class ProductoController extends ProductoBean {
 
     @Autowired
     private TiendaDao tiendaDao;
+
+    @Autowired
+    private ProductoValoracionDao productoValoracionDao;
 
     @Qualifier("categoria")
     Categoria categoria;
@@ -64,6 +68,11 @@ public class ProductoController extends ProductoBean {
 
         return null;
 
+    }
+
+    @RequestMapping("/productos/obtenerValoracionesProducto")
+    public List<ProductoValoracion> obtenerTodosProductoValoracion(){
+        return (List<ProductoValoracion>) productoValoracionDao.findAll();
     }
 
 

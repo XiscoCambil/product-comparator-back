@@ -27,14 +27,14 @@ public class ProductoTiendaController extends ProductoTiendaBean{
     private ProductoDao productoDao;
 
 
-    @RequestMapping("/obtenerTodosProductoTienda")
+    @RequestMapping("/productoTienda/obtenerTodosProductoTienda")
     public List<ProductoTienda> obtenerTodosProductoTienda(){
         return (List<ProductoTienda>) getProductoTiendaDao().findAll();
     }
 
     @RequestMapping("/productoTienda/obtenerProductoTiendaPorId")
     public ProductoTienda obtenerProductoTiendaPorId(@RequestParam long id){
-        return getProductoTiendaDao().findById(id);
+        return getProductoTiendaDao().findOne(id);
     }
 
 

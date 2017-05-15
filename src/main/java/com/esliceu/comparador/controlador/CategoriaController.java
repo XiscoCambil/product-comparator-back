@@ -19,9 +19,9 @@ public class CategoriaController extends CategoriaBean {
         return (List<Categoria>) getCategoriaDao().findAll();
     }
 
-    @RequestMapping("/categoria/ObtenerCategoriaPorNombre")
-    public Categoria obtenerCategoriaPorNombre(@RequestParam(required = true) String nombre) {
-        return getCategoriaDao().findByNombre(nombre);
+    @RequestMapping("/categoria/obtenerCategoriaPorId")
+    public Categoria obtenerCategoriaPorNombre(@RequestParam(required = true) Long id_categoria) {
+        return getCategoriaDao().findById(id_categoria);
     }
 
     @RequestMapping("/categoria/ObtenerHijosDeCategoriaPadre")
