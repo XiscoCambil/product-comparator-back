@@ -1,6 +1,7 @@
 package com.esliceu.comparador.controlador;
 
 import com.esliceu.comparador.bean.CarroBean;
+import com.esliceu.comparador.dao.ProductoCarroDao;
 import com.esliceu.comparador.dao.ProductoDao;
 import com.esliceu.comparador.dao.ProductoTiendaDao;
 import com.esliceu.comparador.dao.UsuarioDao;
@@ -30,6 +31,9 @@ public class CarroController extends CarroBean {
 
     @Autowired
     private ProductoTiendaDao productoTiendaDao;
+
+    @Autowired
+    private ProductoCarroDao productoCarroDao;
 
 
     @RequestMapping(value= "/usario/carros/obtenerCarrosUsuario", method = RequestMethod.POST)
@@ -66,10 +70,13 @@ public class CarroController extends CarroBean {
 
         JWT jwt = new JWT();
         AccesToken accesToken = jwt.decodificarJwt((String) json.get("accesToken"));
-        Long id_carro = (Long) json.get("id_carro");
+        Long id_carro = (long)(int)json.get("id_carro");
         List<Carro> carros = usuarioDao.findOne((long)accesToken.getId()).getCarros();
         for(Carro carro: carros){
             if(carro.getId() == id_carro){
+                for(ProductoCarro productoCarro : carro.getProductos()){
+                    productoCarroDao.delete(productoCarro);
+                }
                 getCarroDao().delete(carro);
                 break;
             }
