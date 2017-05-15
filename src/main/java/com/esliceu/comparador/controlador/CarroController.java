@@ -61,5 +61,20 @@ public class CarroController extends CarroBean {
         return productoEnCarro;
     }
 
+    @RequestMapping(value= "/carro/eliminarCarroUsuario", method = RequestMethod.POST)
+    public @ResponseBody Object eliminarCarroUsuario(@RequestBody Map<String,Object> json) throws UnsupportedEncodingException {
+
+        JWT jwt = new JWT();
+        AccesToken accesToken = jwt.decodificarJwt((String) json.get("accesToken"));
+        Long id_carro = (Long) json.get("id_carro");
+        List<Carro> carros = usuarioDao.findOne((long)accesToken.getId()).getCarros();
+        for(Carro carro: carros){
+            if(carro.getId() == id_carro){
+                getCarroDao().delete(carro);
+                break;
+            }
+        }
+        return 200;
+    }
 
 }
