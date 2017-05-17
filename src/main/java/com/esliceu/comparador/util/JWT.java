@@ -60,10 +60,10 @@ public class JWT {
         try {
            accesToken = decodificarJwt(token.getAccesToken());
            if(accesToken.getFechaExp().getTime() < new Date().getTime()){
-               return 502;
+               return 302;
            }
         }catch (Exception e){
-            return 500;
+            return 300;
         }
         return 200;
     }

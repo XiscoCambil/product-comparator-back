@@ -8,9 +8,12 @@ import com.esliceu.comparador.dao.UsuarioDao;
 import com.esliceu.comparador.model.*;
 import com.esliceu.comparador.util.AccesToken;
 import com.esliceu.comparador.util.JWT;
+import com.esliceu.comparador.util.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,9 +30,6 @@ public class CarroController extends CarroBean {
     private UsuarioDao usuarioDao;
 
     @Autowired
-    private ProductoDao productoDao;
-
-    @Autowired
     private ProductoTiendaDao productoTiendaDao;
 
     @Autowired
@@ -37,12 +37,15 @@ public class CarroController extends CarroBean {
 
 
     @RequestMapping(value= "/usario/carros/obtenerCarrosUsuario", method = RequestMethod.POST)
-    public @ResponseBody List<Carro> obtenerCarrosDeUsuario(@RequestBody Map<String,Object> json) throws UnsupportedEncodingException {
+    public @ResponseBody List<Carro> obtenerCarrosDeUsuario(@RequestBody Map<String,Object> json) throws IOException {
 
-        JWT jwt = new JWT();
-        AccesToken accesToken = jwt.decodificarJwt((String) json.get("accesToken"));
-
-        return usuarioDao.findOne((long)accesToken.getId()).getCarros();
+        AccesToken accesToken = validarToken(json);
+        if(accesToken != null) {
+            return usuarioDao.findOne((long) accesToken.getId()).getCarros();
+        }else {
+             httpServletResponse.sendError(300);
+        }
+        return null;
     }
 
     @RequestMapping(value= "/carro/obtenerProductosCarro", method = RequestMethod.POST)
@@ -65,23 +68,66 @@ public class CarroController extends CarroBean {
         return productoEnCarro;
     }
 
-    @RequestMapping(value= "/carro/eliminarCarroUsuario", method = RequestMethod.POST)
-    public @ResponseBody Object eliminarCarroUsuario(@RequestBody Map<String,Object> json) throws UnsupportedEncodingException {
+    @RequestMapping(value= "/usuario/carro/eliminarCarroUsuario", method = RequestMethod.POST)
+    public @ResponseBody Object eliminarCarroUsuario(@RequestBody Map<String,Object> json) throws IOException {
 
-        JWT jwt = new JWT();
-        AccesToken accesToken = jwt.decodificarJwt((String) json.get("accesToken"));
-        Long id_carro = (long)(int)json.get("id_carro");
-        List<Carro> carros = usuarioDao.findOne((long)accesToken.getId()).getCarros();
-        for(Carro carro: carros){
-            if(carro.getId() == id_carro){
-                for(ProductoCarro productoCarro : carro.getProductos()){
-                    productoCarroDao.delete(productoCarro);
+
+        AccesToken accesToken = validarToken(json);
+        if(accesToken != null) {
+            int id_carro = (int) json.get("id_carro");
+            List<Carro> carros = usuarioDao.findOne((long)accesToken.getId()).getCarros();
+            for(Carro carro: carros){
+                if(carro.getId() == id_carro){
+                    for(ProductoCarro productoCarro : carro.getProductos()){
+                        productoCarroDao.delete(productoCarro);
+                    }
+                    getCarroDao().delete(carro);
+                    break;
                 }
-                getCarroDao().delete(carro);
-                break;
             }
+            return 200;
+        }else{
+            httpServletResponse.sendError(300);
         }
-        return 200;
+        return null;
+    }
+
+    @RequestMapping(value= "/usuario/carro/anadirCarroUsuario", method = RequestMethod.POST)
+    public @ResponseBody Carro añadirCarroUsuario(@RequestBody Map<String,Object> json) throws IOException {
+
+        AccesToken accesToken = validarToken(json);
+        if(accesToken != null) {
+                Carro carro = new Carro((long) accesToken.getId(), (String) json.get("nombre"));
+                carro.setProductos(new ArrayList<>());
+                getCarroDao().save(carro);
+                return carro;
+        }else {
+            httpServletResponse.sendError(300);
+        }
+        return null;
+
+    }
+
+    @RequestMapping(value= "/usuario/carro/editarCarroUsuario", method = RequestMethod.POST)
+    public @ResponseBody Object editarCarroUsuario(@RequestBody Map<String,Object> json) throws IOException {
+
+
+        AccesToken accesToken = validarToken(json);
+        if(accesToken != null) {
+            List<Carro> carros = usuarioDao.findOne((long) accesToken.getId()).getCarros();
+            int id_carro = (int) json.get("id_carro");
+            for(Carro carro: carros){
+                if(carro.getId() == id_carro){
+                    carro.setNombre((String) json.get("nombre"));
+                    getCarroDao().save(carro);
+                    break;
+                }
+            }
+            return 200;
+        } else {
+            httpServletResponse.sendError(300);
+        }
+        return null;
     }
 
 }
