@@ -3,11 +3,13 @@ package com.esliceu.comparador.controlador;
 import com.esliceu.comparador.bean.TiendaBean;
 import com.esliceu.comparador.model.ProductoTienda;
 import com.esliceu.comparador.model.Tienda;
+import com.esliceu.comparador.util.AccesToken;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +53,16 @@ public class TiendaController extends TiendaBean{
     {
         List<Tienda> tiendas = getTiendaDao().findByIdIn(id_tiendas);
         return tiendas;
+    }
+
+    @RequestMapping("/productoTienda/obtenerTiendasPorProductos")
+    public  List<Tienda> obtenerTiendasPorProductos(@RequestParam List<Long> id_tiendas) throws IOException {
+        try {
+            return getTiendaDao().findByIdIn(id_tiendas);
+        } catch (Exception e) {
+            httpServletResponse.sendError(300);
+            return null;
+        }
     }
 
 }

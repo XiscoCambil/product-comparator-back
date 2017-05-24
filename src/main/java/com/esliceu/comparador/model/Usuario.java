@@ -26,6 +26,8 @@ public class Usuario extends BaseModel{
     @OneToMany(mappedBy = "idUsuario")
     private List<Carro> carros;
 
+    @OneToMany(mappedBy = "idUsuario")
+    private List<SeguimientoProducto> seguimientoProductos;
 
     public Usuario(String nombre, String apellidos, Long telefono, String email, String password, int id_localidad) {
         this.nombre = nombre;
@@ -92,5 +94,13 @@ public class Usuario extends BaseModel{
 
     public void setCarros(List<Carro> carros) {
         this.carros = carros;
+    }
+
+    public List<SeguimientoProducto> getSeguimientoProductos() {
+        return seguimientoProductos;
+    }
+
+    public void setSeguimientoProductos(List<SeguimientoProducto> seguimientoProductos) {
+        this.seguimientoProductos = seguimientoProductos;
     }
 }

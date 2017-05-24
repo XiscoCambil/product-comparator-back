@@ -6,13 +6,14 @@ import com.esliceu.comparador.dao.TiendaDao;
 import com.esliceu.comparador.model.Producto;
 import com.esliceu.comparador.model.ProductoTienda;
 import com.esliceu.comparador.model.Tienda;
+import com.esliceu.comparador.util.AccesToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by blackwidow on 24/04/17.
@@ -26,6 +27,9 @@ public class ProductoTiendaController extends ProductoTiendaBean{
     @Autowired
     private ProductoDao productoDao;
 
+    @Autowired
+    private ProductoTienda productoTienda;
+
 
     @RequestMapping("/productoTienda/obtenerTodosProductoTienda")
     public List<ProductoTienda> obtenerTodosProductoTienda(){
@@ -36,6 +40,8 @@ public class ProductoTiendaController extends ProductoTiendaBean{
     public ProductoTienda obtenerProductoTiendaPorId(@RequestParam long id){
         return getProductoTiendaDao().findOne(id);
     }
+
+
 
 
 

@@ -14,10 +14,10 @@ public class Empresa extends BaseModel {
 
     @OneToMany(mappedBy = "idEmpresa")
     private List<Marca> marcas;
-
+/*
     @OneToMany(mappedBy = "idEmpresa")
     private List<Tienda> tiendas;
-
+*/
     public Empresa(String nombre) {
         this.nombre = nombre;
     }
@@ -39,7 +39,7 @@ public class Empresa extends BaseModel {
     public void setMarcas(List<Marca> marcas) {
         this.marcas = marcas;
     }
-
+/*
     public List<Tienda> getTiendas() {
         return tiendas;
     }
@@ -47,4 +47,5 @@ public class Empresa extends BaseModel {
     public void setTiendas(List<Tienda> tiendas) {
         this.tiendas = tiendas;
     }
+    */
 }

@@ -8,4 +8,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ProductoCarroDao extends CrudRepository<ProductoCarro,Long> {
     ProductoCarro findByIdCarro(Long id_carro);
+
 }

@@ -40,12 +40,12 @@ public class CarroController extends CarroBean {
     public @ResponseBody List<Carro> obtenerCarrosDeUsuario(@RequestBody Map<String,Object> json) throws IOException {
 
         AccesToken accesToken = validarToken(json);
-        if(accesToken != null) {
+        try {
             return usuarioDao.findOne((long) accesToken.getId()).getCarros();
-        }else {
-             httpServletResponse.sendError(300);
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+            return null;
         }
-        return null;
     }
 
     @RequestMapping(value= "/carro/obtenerProductosCarro", method = RequestMethod.POST)
@@ -71,9 +71,8 @@ public class CarroController extends CarroBean {
     @RequestMapping(value= "/usuario/carro/eliminarCarroUsuario", method = RequestMethod.POST)
     public @ResponseBody Object eliminarCarroUsuario(@RequestBody Map<String,Object> json) throws IOException {
 
-
         AccesToken accesToken = validarToken(json);
-        if(accesToken != null) {
+        try{
             int id_carro = (int) json.get("id_carro");
             List<Carro> carros = usuarioDao.findOne((long)accesToken.getId()).getCarros();
             for(Carro carro: carros){
@@ -82,49 +81,68 @@ public class CarroController extends CarroBean {
                         productoCarroDao.delete(productoCarro);
                     }
                     getCarroDao().delete(carro);
-                    break;
+                    return 200;
                 }
             }
-            return 200;
-        }else{
+        }catch (Exception e){
             httpServletResponse.sendError(300);
+            return null;
         }
         return null;
+
     }
 
     @RequestMapping(value= "/usuario/carro/anadirCarroUsuario", method = RequestMethod.POST)
     public @ResponseBody Carro añadirCarroUsuario(@RequestBody Map<String,Object> json) throws IOException {
-
         AccesToken accesToken = validarToken(json);
-        if(accesToken != null) {
-                Carro carro = new Carro((long) accesToken.getId(), (String) json.get("nombre"));
-                carro.setProductos(new ArrayList<>());
-                getCarroDao().save(carro);
-                return carro;
-        }else {
+        try {
+            Carro carro = new Carro((long) accesToken.getId(), (String) json.get("nombre"));
+            carro.setProductos(new ArrayList<>());
+            getCarroDao().save(carro);
+            return carro;
+        }catch (Exception e){
             httpServletResponse.sendError(300);
+            return null;
         }
-        return null;
-
     }
 
     @RequestMapping(value= "/usuario/carro/editarCarroUsuario", method = RequestMethod.POST)
     public @ResponseBody Object editarCarroUsuario(@RequestBody Map<String,Object> json) throws IOException {
 
-
         AccesToken accesToken = validarToken(json);
-        if(accesToken != null) {
+        try{
             List<Carro> carros = usuarioDao.findOne((long) accesToken.getId()).getCarros();
             int id_carro = (int) json.get("id_carro");
             for(Carro carro: carros){
                 if(carro.getId() == id_carro){
                     carro.setNombre((String) json.get("nombre"));
                     getCarroDao().save(carro);
-                    break;
+                    return 200;
                 }
             }
-            return 200;
-        } else {
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+            return null;
+        }
+        return null;
+    }
+
+    @RequestMapping(value= "/usuario/carro/anadirProductoACarro", method = RequestMethod.POST)
+    public @ResponseBody Object anadirProductoACarro(@RequestBody Map<String,Object> json) throws IOException {
+
+        AccesToken accesToken = validarToken(json);
+        try{
+            for(Carro carro : usuarioDao.findOne((long)accesToken.getId()).getCarros()){
+                int id_carro = (int) json.get("id_carro");
+                Long id = carro.getId();
+                if(id == id_carro) {
+                    ProductoCarro productoCarro = new ProductoCarro( new Long((int)json.get("idProductoTienda")) ,id);
+                    productoCarroDao.save(productoCarro);
+                    return 200;
+                }
+            }
+            httpServletResponse.sendError(300);
+        }catch (Exception e){
             httpServletResponse.sendError(300);
         }
         return null;

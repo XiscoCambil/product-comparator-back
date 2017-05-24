@@ -24,9 +24,9 @@ public class Producto extends BaseModel {
 
     private Double grasas;
 
-    @Column(name = "id_marca")
+   /* @Column(name = "id_marca")
     private long idMarca;
-
+*/
     @Column(name = "id_categoria")
     private long idCategoria;
 
@@ -36,14 +36,18 @@ public class Producto extends BaseModel {
     @OneToMany(mappedBy = "idProducto")
     private List<ProductoTienda> productoTiendas;
 
-    public Producto(String nombre, String codigoBarras, int valorEnergetico, Double proteinas, Double carbohidratos, Double grasas, long id_marca, long id_categoria) {
+    @ManyToOne
+    @JoinColumn(columnDefinition = "integer",name = "idMarca")
+    private Marca marca;
+
+    public Producto(String nombre, String codigoBarras, int valorEnergetico, Double proteinas, Double carbohidratos, Double grasas /*long id_marca*/, long id_categoria) {
         this.nombre = nombre;
         this.codigoBarras = codigoBarras;
         this.valorEnergetico = valorEnergetico;
         this.proteinas = proteinas;
         this.carbohidratos = carbohidratos;
         this.grasas = grasas;
-        this.idMarca = id_marca;
+       // this.idMarca = id_marca;
         this.idCategoria = id_categoria;
     }
 
@@ -97,7 +101,7 @@ public class Producto extends BaseModel {
         this.grasas = grasas;
     }
 
-
+/*
     public long getIdMarca() {
         return idMarca;
     }
@@ -105,6 +109,7 @@ public class Producto extends BaseModel {
     public void setIdMarca(long idMarca) {
         this.idMarca = idMarca;
     }
+    */
 
     public List<ProductoValoracion> getProductoValoracion() {
         return productoValoracion;
@@ -128,5 +133,13 @@ public class Producto extends BaseModel {
 
     public void setIdCategoria(long idCategoria) {
         this.idCategoria = idCategoria;
+    }
+
+    public Marca getMarca() {
+        return marca;
+    }
+
+    public void setMarca(Marca marca) {
+        this.marca = marca;
     }
 }

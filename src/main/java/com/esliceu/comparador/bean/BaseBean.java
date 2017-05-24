@@ -24,11 +24,15 @@ public class BaseBean {
 
     public AccesToken validarToken(Map<String,Object> json) throws IOException {
         JWT jwt = new JWT();
-        Token token = new Token((String) json.get("accesToken"), null);
-        int code = jwt.validarJwt(token);
-        if(code != 200){
-           return null;
+        try {
+            Token token = new Token((String) json.get("accesToken"), null);
+            int code = jwt.validarJwt(token);
+            if (code != 200) {
+                return null;
+            }
+            return jwt.decodificarJwt(token.getAccesToken());
+        }catch (Exception e) {
+            return null;
         }
-        return jwt.decodificarJwt(token.getAccesToken());
     }
 }

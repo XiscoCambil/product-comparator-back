@@ -19,15 +19,21 @@ public class Tienda extends BaseModel {
     private String direccion;
 
     private Long telefono;
-
+/*
     @Column(name = "id_empresa")
     private long idEmpresa;
 
+*/
     @Column(name = "id_localidad")
     private int idLocalidad;
 
     @OneToMany(mappedBy = "idTienda")
     private List<ProductoTienda> productosTienda;
+
+    @ManyToOne
+    @JoinColumn(columnDefinition = "integer",name = "id_empresa")
+    private Empresa empresa;
+
 
     public Tienda(String cif, Double latitud, Double longitud, String direccion, Long telefono) {
         this.cif = cif;
@@ -79,6 +85,7 @@ public class Tienda extends BaseModel {
         this.telefono = telefono;
     }
 
+    /*
     public long getIdEmpresa() {
         return idEmpresa;
     }
@@ -87,6 +94,7 @@ public class Tienda extends BaseModel {
         this.idEmpresa = idEmpresa;
     }
 
+*/
     public int getIdLocalidad() {
         return idLocalidad;
     }
@@ -101,6 +109,14 @@ public class Tienda extends BaseModel {
 
     public void setProductosTienda(List<ProductoTienda> productosTienda) {
         this.productosTienda = productosTienda;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 }
 
