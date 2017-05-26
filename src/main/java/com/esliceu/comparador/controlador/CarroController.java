@@ -11,14 +11,12 @@ import com.esliceu.comparador.util.JWT;
 import com.esliceu.comparador.util.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.awt.image.ImageWatched;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by blackwidow on 26/04/17.
@@ -136,9 +134,10 @@ public class CarroController extends CarroBean {
                 int id_carro = (int) json.get("id_carro");
                 Long id = carro.getId();
                 if(id == id_carro) {
-                    ProductoCarro productoCarro = new ProductoCarro( new Long((int)json.get("idProductoTienda")) ,id);
+                    ProductoCarro productoCarro = new ProductoCarro(new Long((int) json.get("idProductoTienda")), id);
                     productoCarroDao.save(productoCarro);
-                    return 200;
+                    ProductoTienda productoTienda = productoTiendaDao.findOne((long)(int) json.get("idProductoTienda"));
+                    return productoTienda.getHistorialPrecio().get(productoTienda.getHistorialPrecio().size()-1).getPrecio();
                 }
             }
             httpServletResponse.sendError(300);
@@ -146,6 +145,32 @@ public class CarroController extends CarroBean {
             httpServletResponse.sendError(300);
         }
         return null;
+    }
+
+    @RequestMapping(value= "/carro/obtenerPreciosCarro", method = RequestMethod.POST)
+    public @ResponseBody List<Object> obtenerPreciosCarros(@RequestBody Map<String,Object> json) throws IOException {
+
+        AccesToken accesToken = validarToken(json);
+        try{
+           List<Carro> carros = usuarioDao.findOne((long) accesToken.getId()).getCarros();
+            List<Object> precios = new ArrayList<>();
+            double precio = 0.0;
+            for(int i = 0; i < carros.size(); i++) {
+                if (carros.get(i).getProductos() != null && carros.get(i).getProductos().size() > 0) {
+                    for (int j = 0; j < carros.get(i).getProductos().size(); j++) {
+                        ProductoTienda productoTienda = productoTiendaDao.findOne(carros.get(i).getProductos().get(j).getIdProductoTienda());
+                        precio += productoTienda.getHistorialPrecio().get(productoTienda.getHistorialPrecio().size() - 1).getPrecio();
+                    }
+                }
+                precios.add(precio);
+                precio = 0.0;
+            }
+            return precios;
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+            return null;
+        }
+
     }
 
 }
