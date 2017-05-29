@@ -46,24 +46,24 @@ public class CarroController extends CarroBean {
         }
     }
 
-    @RequestMapping(value= "/carro/obtenerProductosCarro", method = RequestMethod.POST)
-    public @ResponseBody List<ProductoTienda> obtenerProductosCarro(@RequestBody Map<String,Object> json) throws UnsupportedEncodingException {
+    @RequestMapping(value= "/usuario/carro/obtenerProductosCarro", method = RequestMethod.POST)
+    public @ResponseBody List<ProductoCarro> obtenerProductosCarro(@RequestBody Map<String,Object> json) throws IOException {
 
-        JWT jwt = new JWT();
-        HashMap<String,Object> map = new HashMap<>();
-        List<ProductoTienda> productoEnCarro = new ArrayList<>();
-        List<Producto> productos = new ArrayList<>();
-        AccesToken accesToken = jwt.decodificarJwt((String) json.get("accesToken"));
-        Usuario usuario = usuarioDao.findOne((long)accesToken.getId());
-        for(Carro carro : usuario.getCarros()){
-            if(carro.getId() == (int) json.get("id_carro")){
-                for(ProductoCarro productoCarro : getCarroDao().findById(carro.getId()).getProductos()) {
-                    productoEnCarro.add(productoTiendaDao.findOne(productoCarro.getIdProductoTienda()));
+        AccesToken accesToken = validarToken(json);
+        try{
+            int id_carro = (int) json.get("id_carro");
+            List<Carro> carros = usuarioDao.findOne((long)accesToken.getId()).getCarros();
+            for(Carro carro: carros){
+                if(carro.getId() == id_carro){
+                    return carro.getProductos();
                 }
             }
+            httpServletResponse.sendError(300);
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+            return null;
         }
-
-        return productoEnCarro;
+        return null;
     }
 
     @RequestMapping(value= "/usuario/carro/eliminarCarroUsuario", method = RequestMethod.POST)
@@ -82,12 +82,12 @@ public class CarroController extends CarroBean {
                     return 200;
                 }
             }
+            httpServletResponse.sendError(300);
         }catch (Exception e){
             httpServletResponse.sendError(300);
             return null;
         }
         return null;
-
     }
 
     @RequestMapping(value= "/usuario/carro/anadirCarroUsuario", method = RequestMethod.POST)
@@ -138,6 +138,31 @@ public class CarroController extends CarroBean {
                     productoCarroDao.save(productoCarro);
                     ProductoTienda productoTienda = productoTiendaDao.findOne((long)(int) json.get("idProductoTienda"));
                     return productoTienda.getHistorialPrecio().get(productoTienda.getHistorialPrecio().size()-1).getPrecio();
+                }
+            }
+            httpServletResponse.sendError(300);
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+        }
+        return null;
+    }
+
+    @RequestMapping(value= "/usuario/carro/eliminarProductoCarro", method = RequestMethod.POST)
+    public @ResponseBody Object eliminarProductoCarro(@RequestBody Map<String,Object> json) throws IOException {
+
+        AccesToken accesToken = validarToken(json);
+        try{
+            for(Carro carro : usuarioDao.findOne((long)accesToken.getId()).getCarros()){
+                int id_carro = (int) json.get("id_carro");
+                Long id = carro.getId();
+                if(id == id_carro) {
+                    ProductoCarro productoCarro = productoCarroDao.findOne( (long)(int) json.get("id_producto_carro"));
+                    for(ProductoCarro productoCarros : carro.getProductos()){
+                        if(productoCarros.equals(productoCarro)){
+                            productoCarroDao.delete(productoCarro);
+                            return 200;
+                        }
+                    }
                 }
             }
             httpServletResponse.sendError(300);
