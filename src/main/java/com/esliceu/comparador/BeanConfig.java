@@ -33,7 +33,7 @@ public class BeanConfig {
     }
 
     @Bean
-    @Scope(value = "prototype")
+    @Scope(value = "prototJWType")
     public Categoria categoria(){
         return new Categoria();
     }
@@ -103,7 +103,7 @@ public class BeanConfig {
 
     @Bean
     @Scope(value = "prototype")
-    public JWT JWT() throws UnsupportedEncodingException {return new JWT();}
+    public JWT jwt() throws UnsupportedEncodingException {return new JWT();}
 
 
 

@@ -13,4 +13,8 @@ public class Keys {
     //public static long EXPIRACION_TOKEN =100;
     public static long EXPIRACION_REFRESH_TOKEN = 3600000;
     //public static long EXPIRACION_REFRESH_TOKEN = 100;
+
+    //Codigos de errores
+    public static int ERROR_GENERICO_CODE = 300;
+    public static int EMAIL_REPETIDO_CODE = 202;
 }

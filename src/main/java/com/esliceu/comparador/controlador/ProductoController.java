@@ -90,7 +90,7 @@ public class ProductoController extends ProductoBean {
     }
 
 
-    private boolean productoEnCategoria(Producto producto,Long id_categoria){
+    private boolean productoEnCategoria(Producto producto,Long id_categoria) throws IOException {
         boolean productoEnCategoria = false;
         boolean categoriaConHijos = false;
         CategoriaController categoriaController = new CategoriaController();
