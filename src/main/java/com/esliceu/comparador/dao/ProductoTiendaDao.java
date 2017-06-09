@@ -13,5 +13,6 @@ public interface ProductoTiendaDao extends CrudRepository<ProductoTienda,Long> {
      List<ProductoTienda> findByIdProducto(Long id_producto);
      List<ProductoTienda> findByIdTienda(Long id_tienda);
      List<ProductoTienda> findByIdIn(List<Long> id_productos);
+     List<ProductoTienda> findByidTiendaIn(List<Tienda> id_tiendas);
 
 }

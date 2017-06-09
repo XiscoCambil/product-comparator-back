@@ -17,7 +17,9 @@ public class ProductoTienda extends BaseModel {
     @Column(name = "id_producto")
     private Long idProducto;
 
+
     @OneToMany(mappedBy = "idProductoTienda")
+    @OrderBy("fecha DESC")
     private List<HistorialProductoTienda> historialPrecio;
 
     @OneToMany(mappedBy = "idProductoTienda")

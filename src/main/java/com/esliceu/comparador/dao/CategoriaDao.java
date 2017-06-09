@@ -1,6 +1,8 @@
 package com.esliceu.comparador.dao;
 
 import com.esliceu.comparador.model.Categoria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -15,5 +17,5 @@ public interface CategoriaDao extends CrudRepository<Categoria, Long> {
 
     List<Categoria> findByPadre(Categoria categoria);
 
-
+    List<Categoria> findByPadreIn(Categoria categoria);
 }

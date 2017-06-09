@@ -139,7 +139,7 @@ public class CarroController extends CarroBean {
                     ProductoTienda productoTienda = productoTiendaDao.findOne((long)(int) json.get("idProductoTienda"));
                     double precio = 0.0;
                     if(productoTienda.getHistorialPrecio().size() > 0){
-                       precio =  productoTienda.getHistorialPrecio().get(productoTienda.getHistorialPrecio().size()-1).getPrecio();
+                       precio =  productoTienda.getHistorialPrecio().get(0).getPrecio();
                     }
                     return precio;
                 }
@@ -166,7 +166,7 @@ public class CarroController extends CarroBean {
                             double precio = 0.0;
                             ProductoTienda productoTienda = productoTiendaDao.findOne(productoCarro.getIdProductoTienda());
                             if(productoTienda.getHistorialPrecio().size() > 0){
-                                precio = productoTienda.getHistorialPrecio().get(productoTienda.getHistorialPrecio().size()-1).getPrecio();
+                                precio = productoTienda.getHistorialPrecio().get(0).getPrecio();
                             }
                             productoCarroDao.delete(productoCarro);
                             return precio;
@@ -194,7 +194,7 @@ public class CarroController extends CarroBean {
                     for (int j = 0; j < carros.get(i).getProductos().size(); j++) {
                         ProductoTienda productoTienda = productoTiendaDao.findOne(carros.get(i).getProductos().get(j).getIdProductoTienda());
                         if(productoTienda.getHistorialPrecio().size() > 0){
-                            precio += productoTienda.getHistorialPrecio().get(productoTienda.getHistorialPrecio().size() - 1).getPrecio();
+                            precio += productoTienda.getHistorialPrecio().get(0).getPrecio();
                         }
                     }
                 }

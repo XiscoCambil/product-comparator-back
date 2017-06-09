@@ -1,5 +1,10 @@
 package com.esliceu.comparador.model;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.ParamDef;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,7 +13,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="fct_producto")
-public class Producto extends BaseModel {
+public class Producto extends BaseModel{
 
     private String nombre;
 

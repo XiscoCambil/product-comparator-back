@@ -23,7 +23,7 @@ public class TiendaController extends TiendaBean{
     public List<Tienda> obtenerTodasTiendas(){
         return (List<Tienda>) getTiendaDao().findAll();
     }
-
+/*
     @RequestMapping("/tienda/obtenerTiendasPorProductoYLocalidad")
     public List<Tienda> obtenerTiendasPorProducto(
             @RequestParam Long id_producto,
@@ -46,10 +46,10 @@ public class TiendaController extends TiendaBean{
         }
         return tiendasConProducto;
     }
-
+*/
     @RequestMapping("/tienda/obtenerTiendasPorIds")
     public List<Tienda> obtenerTiendasPorProducto(
-            @RequestParam(required = true) List<Long> id_tiendas)
+            @RequestParam List<Long> id_tiendas)
     {
         List<Tienda> tiendas = getTiendaDao().findByIdIn(id_tiendas);
         return tiendas;
