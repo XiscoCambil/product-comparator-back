@@ -6,9 +6,11 @@ import com.esliceu.comparador.dao.ProductoValoracionDao;
 import com.esliceu.comparador.dao.TiendaDao;
 import com.esliceu.comparador.model.*;
 import com.esliceu.comparador.util.AccesToken;
+import com.esliceu.comparador.util.JpaUtil;
 import jdk.nashorn.internal.scripts.JO;
 import org.hibernate.Filter;
 import org.hibernate.Session;
+import org.hibernate.internal.util.type.PrimitiveWrapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -64,22 +66,28 @@ public class ProductoController extends ProductoBean {
             @RequestBody Map<String,Object> json) throws IOException {
 
         AccesToken accesToken = validarToken(json);
+        Long categoriaGeneral,subcategoria,categoriaProducto = null,calorias;
+        double hidratos,grasas,proteinas;
+        int localidad;
+        ArrayList categoriasProducto = new ArrayList<Integer>();
+        boolean filtros = false;
         try{
-            long categoriaGeneral,subcategoria,categoriaProducto,calorias;
-            double hidratos,grasas,proteinas;
-            int localidad;
-
             int maxResult = 20;
             int page = 0;
             if(accesToken != null){
                 categoriaGeneral = Long.parseLong(String.valueOf(json.get("categoriaGeneral")));
                 subcategoria = Long.parseLong(String.valueOf(json.get("subcategoria")));
-                categoriaProducto = Long.parseLong(String.valueOf(json.get("categoriaProductos")));
+                if(json.get("categoriaProductos") instanceof String){
+                   categoriaProducto = Long.parseLong(String.valueOf(json.get("categoriaProductos")));
+               }else if(json.get("categoriaProductos") instanceof ArrayList){
+                  categoriasProducto = (ArrayList) json.get("categoriaProductos");
+               }
                 calorias = Long.parseLong(String.valueOf(json.get("calorias")));
                 proteinas = Double.parseDouble(String.valueOf(json.get("proteinas")));
                 grasas = Double.parseDouble(String.valueOf(json.get("grasas")));
                 hidratos = Double.parseDouble(String.valueOf(json.get("hidratos")));
                 localidad = Integer.parseInt(String.valueOf(json.get("localidad")));
+                filtros = (boolean) json.get("filtradoActivado");
 
                 List<Producto> productos = new ArrayList<>();
                 CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -91,27 +99,42 @@ public class ProductoController extends ProductoBean {
                 predicates.add(builder.lt(from.get("grasas"),grasas));
                 predicates.add(builder.lt(from.get("proteinas"),proteinas));
 
-                if(categoriaGeneral == 0 && subcategoria == 0 && categoriaProducto == 0){
-                   if(localidad != 0){
-                       query.select(from).where(predicates.toArray(new Predicate[]{}));
-                       em.createQuery(query).setMaxResults(maxResult).setFirstResult(page).getResultList();
-                       return productoEnLocalidad(
-                               localidad,
-                               em.createQuery(query).setMaxResults(maxResult).setFirstResult(page).getResultList()
-                       );
-                   }else{
-                       return em.createQuery(query).setMaxResults(maxResult).setFirstResult(page).getResultList();
+                if(categoriaGeneral == 0 && subcategoria == 0 && categoriaProducto == null){
+                    query.select(from).where(predicates.toArray(new Predicate[]{}));
+                   productos = em.createQuery(query).setMaxResults(maxResult).setFirstResult(page).getResultList();
+                   if(filtros) {
+                       if (localidad != 0) {
+                           return productoEnLocalidad(
+                                   localidad,
+                                   productos
+                           );
+                       }else{
+                           return productos;
+                       }
                    }
+                    return productoEnLocalidad(
+                            accesToken.getId_localidad(),
+                            productos
+                    );
                 }else{
-                    if(categoriaProducto != 0){
+                    if(categoriaProducto != null){
                        predicates.add(builder.equal(from.get("idCategoria"),categoriaProducto));
+                        query.select(from).where(builder.and(predicates.toArray(new Predicate[]{})));
+                        productos = em.createQuery(query).setMaxResults(maxResult).setFirstResult(page).getResultList();
+                    }else{
+                        query.select(from).where(builder.and(predicates.toArray(new Predicate[]{})));
+                        productos = em.createQuery(query).setMaxResults(maxResult).setFirstResult(page).getResultList();
+                        productos = productosEnCategoria(productos,categoriasProducto);
                     }
                 }
-                query.select(from).where(predicates.toArray(new Predicate[]{}));
-                productos = em.createQuery(query).setMaxResults(maxResult).setFirstResult(page).getResultList();
-                if(localidad != 0){
-                    return productoEnLocalidad(localidad,productos);
+                if(filtros){
+                    if(localidad != 0){
+                            productos = productoEnLocalidad(localidad,productos);
+                    }
+                }else {
+                    productos = productoEnLocalidad(accesToken.getId_localidad(), productos);
                 }
+                return productos;
             }else{
                 throw new Exception();
             }
@@ -127,29 +150,18 @@ public class ProductoController extends ProductoBean {
     }
 
 
-    private boolean productoEnCategoria(Producto producto,Long id_categoria) throws IOException {
-        boolean productoEnCategoria = false;
-        boolean categoriaConHijos = false;
-        CategoriaController categoriaController = new CategoriaController();
-        categoria = getCategoriaDao().findById(producto.getIdCategoria());
-        List<Categoria> categoriasHijas = categoriaController.ObtenerHijosDeCategoriaPadre(categoria.getId());
-        for(Categoria categoriaHija : categoriasHijas){
-            if(categoriaHija.getId() == id_categoria){
-                productoEnCategoria = true;
-                break;
-            }else{
-                List<Categoria> categoriasHijas2 = categoriaController.ObtenerHijosDeCategoriaPadre(categoriaHija.getId());
-                if(categoriasHijas2 != null){
-                    productoEnCategoria(producto,categoriaHija.getId());
+    private List<Producto> productosEnCategoria(List<Producto> productos,List<Integer> categorias) throws IOException {
+        List<Producto> productosFiltrados = new ArrayList<>();
+        for(Producto producto : productos){
+            for(Integer categoria : categorias){
+                if(producto.getIdCategoria() == categoria){
+                    productosFiltrados.add(producto);
+                    break;
                 }
-                return false;
             }
         }
-        if(productoEnCategoria){
-            return true;
-        }
-        return false;
-        }
+        return productosFiltrados;
+    }
 
         private List<Producto> productoEnLocalidad(int id_localidad,List<Producto> productos){
             boolean match = false;

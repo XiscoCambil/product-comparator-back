@@ -17,5 +17,5 @@ public interface CategoriaDao extends CrudRepository<Categoria, Long> {
 
     List<Categoria> findByPadre(Categoria categoria);
 
-    List<Categoria> findByPadreIn(Categoria categoria);
+    List<Categoria> findByPadreIn(List<Categoria> categoria);
 }

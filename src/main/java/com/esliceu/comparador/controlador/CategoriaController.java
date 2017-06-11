@@ -49,7 +49,19 @@ public class CategoriaController extends CategoriaBean {
     public List<Categoria> obtenerCategoriasTop() {
       return getCategoriaDao().findByPadre(null);
     }
-/*
+
+    @RequestMapping("/categoria/obtenerTodasCategoriasPorPadre")
+    public List<Categoria> obtenerTodasCategoriasPorPadre(@RequestParam boolean esSubCategoria) {
+        List<Categoria> categorias = getCategoriaDao().findByPadre(null);
+        List<Categoria> subcategorias = getCategoriaDao().findByPadreIn(categorias);
+        if(!esSubCategoria) {
+            return getCategoriaDao().findByPadreIn(subcategorias);
+        }
+        return subcategorias;
+    }
+
+
+    /*
     @RequestMapping("/categoria/obtenerPaco")
     public Page<Categoria> paco() {
         Categoria categoria = getCategoriaDao().findById((long)2);

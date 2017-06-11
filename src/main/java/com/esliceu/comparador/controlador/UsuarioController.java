@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by blackwidow on 24/04/17.
@@ -31,15 +32,15 @@ public class UsuarioController extends UsuarioBean {
     private JWT jwt;
 
 
-    @RequestMapping(value = "/usuario/obtenerUsuario", method = RequestMethod.POST)
-    public Usuario obtenerTodosUsuarios(@RequestBody Token token) throws IOException {
-        try {
-            AccesToken accesToken = jwt.decodificarJwt(token.getAccesToken());
-            return getUsuarioDao().findOne((long) accesToken.getId());
-        } catch (Exception e) {
+    @RequestMapping(value = "/usuario/obtenerLocalidadUsuario", method = RequestMethod.POST)
+    public @ResponseBody  int obtenerLocalidadUsuario(@RequestBody Map<String,Object> json) throws IOException {
+        AccesToken accesToken = validarToken(json);
+        try{
+            return getUsuarioDao().findOne((long)(int)accesToken.getId()).getIdLocalidad();
+        }catch (Exception e){
             httpServletResponse.sendError(300);
-            return null;
         }
+        return 0;
     }
 
 
@@ -74,10 +75,6 @@ public class UsuarioController extends UsuarioBean {
     }
 
 
-   /* @RequestMapping("/ObtenerMarcaPorNombre")
-    public Marca obtenerMarcaPorNombre(@RequestParam(required = true) String nombre){
-        return getMarcaDao().findByNombre(nombre);
-    }
-    */
+
 
 }
