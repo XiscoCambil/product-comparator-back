@@ -94,6 +94,9 @@ public class CarroController extends CarroBean {
     public @ResponseBody Carro añadirCarroUsuario(@RequestBody Map<String,Object> json) throws IOException {
         AccesToken accesToken = validarToken(json);
         try {
+            if((String) json.get("nombre") == null || (String) json.get("nombre") == ""){
+                throw new Exception();
+            }
             Carro carro = new Carro((long) accesToken.getId(), (String) json.get("nombre"));
             carro.setProductos(new ArrayList<>());
             getCarroDao().save(carro);
@@ -109,6 +112,9 @@ public class CarroController extends CarroBean {
 
         AccesToken accesToken = validarToken(json);
         try{
+            if((String) json.get("nombre") == null || (String) json.get("nombre") == ""){
+                throw new Exception();
+            }
             List<Carro> carros = usuarioDao.findOne((long) accesToken.getId()).getCarros();
             int id_carro = (int) json.get("id_carro");
             for(Carro carro: carros){

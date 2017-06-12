@@ -150,6 +150,17 @@ public class ProductoController extends ProductoBean {
     }
 
 
+    @RequestMapping("/producto/obtenerProductoPorCode")
+    public Producto obtenerProductoPorCode(@RequestParam String code) throws IOException {
+        try {
+            return getProductoDao().findByCodigoBarras(code);
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+        }
+        return null;
+    }
+
+
     private List<Producto> productosEnCategoria(List<Producto> productos,List<Integer> categorias) throws IOException {
         List<Producto> productosFiltrados = new ArrayList<>();
         for(Producto producto : productos){
