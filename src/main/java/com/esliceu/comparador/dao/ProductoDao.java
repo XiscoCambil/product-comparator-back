@@ -21,4 +21,5 @@ public interface ProductoDao extends CrudRepository<Producto,Long> {
     List<Producto> findByGrasas(Double grasas);
     List<Producto> findByIdCategoria(Long id_categoria);
 
+    List<Producto> findByIdIn(List<Long> id_producto);
 }

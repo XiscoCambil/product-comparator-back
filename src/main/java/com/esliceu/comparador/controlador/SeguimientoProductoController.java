@@ -33,14 +33,10 @@ public class SeguimientoProductoController extends SeguimientoProductoBean {
     private UsuarioDao usuarioDao;
 
     @RequestMapping(value = "/usuario/seguimiento/obtenerTodosLosSeguimientos", method = RequestMethod.POST)
-    public @ResponseBody List<Producto> obtenerTodosLosSeguimientos(@RequestBody Map<String, Object> json) throws IOException {
+    public @ResponseBody List<SeguimientoProducto> obtenerTodosLosSeguimientos(@RequestBody Map<String, Object> json) throws IOException {
         AccesToken accesToken = validarToken(json);
         try {
-            List<Producto> productos = new ArrayList<>();
-            for (SeguimientoProducto seguimientoProducto : seguimientoProductoDao.findByIdUsuario((long) accesToken.getId())) {
-                productos.add(productoDao.findOne(seguimientoProducto.getIdProducto()));
-            }
-            return productos;
+            return getSeguimientoProductoDao().findByIdUsuario((long) accesToken.getId());
         } catch (Exception e) {
             httpServletResponse.sendError(300);
             return null;

@@ -6,18 +6,12 @@ import com.esliceu.comparador.dao.ProductoValoracionDao;
 import com.esliceu.comparador.dao.TiendaDao;
 import com.esliceu.comparador.model.*;
 import com.esliceu.comparador.util.AccesToken;
-import com.esliceu.comparador.util.JpaUtil;
-import jdk.nashorn.internal.scripts.JO;
-import org.hibernate.Filter;
-import org.hibernate.Session;
-import org.hibernate.internal.util.type.PrimitiveWrapperHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -61,6 +55,17 @@ public class ProductoController extends ProductoBean {
     }
 
 
+    @RequestMapping("/producto/obtenerProductoIds")
+    public List<Producto> obtenerProductoPorIds(@RequestParam List<Long> id_producto) throws IOException {
+        try {
+            return getProductoDao().findByIdIn(id_producto);
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+            return null;
+        }
+    }
+
+
     @RequestMapping("/producto/obtenerProductosPorLocalidad")
     public @ResponseBody List<Producto> obtenerProductosPorLocalidad(
             @RequestBody Map<String,Object> json) throws IOException {
@@ -88,6 +93,8 @@ public class ProductoController extends ProductoBean {
                 hidratos = Double.parseDouble(String.valueOf(json.get("hidratos")));
                 localidad = Integer.parseInt(String.valueOf(json.get("localidad")));
                 filtros = (boolean) json.get("filtradoActivado");
+                page= (int) json.get("page");
+                maxResult= (int) json.get("maxResult");
 
                 List<Producto> productos = new ArrayList<>();
                 CriteriaBuilder builder = em.getCriteriaBuilder();

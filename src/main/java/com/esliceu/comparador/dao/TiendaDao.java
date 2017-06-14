@@ -9,7 +9,7 @@ import java.util.List;
  * Created by blackwidow on 24/04/17.
  */
 public interface TiendaDao extends CrudRepository<Tienda,Long> {
-    public List<Tienda> findByIdIn(List<Long> id_tiendas);
-    public List<Tienda> findByIdLocalidad(int id_localidad);
-
+    List<Tienda> findByIdIn(List<Long> id_tiendas);
+    List<Tienda> findByIdLocalidad(int id_localidad);
+    List<Tienda> findById(long id_tiendas);
 }
