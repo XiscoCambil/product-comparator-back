@@ -41,6 +41,16 @@ public class ProductoTiendaController extends ProductoTiendaBean{
         return getProductoTiendaDao().findOne(id);
     }
 
+    @RequestMapping("/productoTienda/obtenerListaProductoTiendasPorId")
+    public List<ProductoTienda> obtenerListaProductoTiendasPorId(@RequestParam List<Long> id_productosTiendas) throws IOException {
+        try{
+            return getProductoTiendaDao().findByIdIn(id_productosTiendas);
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+        }
+        return null;
+    }
+
 
 
 

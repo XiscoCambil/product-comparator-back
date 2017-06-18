@@ -37,4 +37,20 @@ public class ProductoValoracionController extends ProductoValoracionBean {
         return null;
     }
 
+    @RequestMapping(value= "/producto/comprobarValoracionUsuario", method = RequestMethod.POST)
+    public @ResponseBody
+    List<ProductoValoracion> comprobarValoracionUsuario(@RequestBody Map<String,Object> json) throws IOException {
+
+        AccesToken accesToken = validarToken(json);
+        try {
+            List<ProductoValoracion> productoValoracion = getProductoValoracionDao().findByIdUsuario(accesToken.getId());
+            if(productoValoracion != null){
+                return productoValoracion;
+            }
+        }catch (Exception e){
+            httpServletResponse.sendError(300);
+        }
+        return null;
+    }
+
 }

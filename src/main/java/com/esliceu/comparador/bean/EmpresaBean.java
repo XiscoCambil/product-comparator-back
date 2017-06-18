@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class EmpresaBean extends BaseBean{
 
-     @Autowired
+    @Autowired
     private EmpresaDao empresaDao;
 
     public EmpresaDao getEmpresaDao() {
